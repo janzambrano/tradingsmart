@@ -1,10 +1,10 @@
-from selenium import webdriver
+from selenium import webdriver 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 
-def scrape_calendar():
+def scrape_website():  # <--- Renombrado para que coincida con app.py
     options = webdriver.ChromeOptions()
     options.add_argument("--headless")  # Ejecuta el navegador en modo oculto
     driver = webdriver.Chrome(options=options)
