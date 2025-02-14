@@ -1,24 +1,30 @@
-from selenium import webdriver 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
 
-def scrape_website():  # <--- Renombrado para que coincida con app.py
+def scrape_website():
+    """ Scrapea datos del calendario económico de Investing.com en DigitalOcean """
+
+    # Configurar opciones de Chrome
     options = webdriver.ChromeOptions()
-    options.add_argument("--headless")  # Ejecuta el navegador en modo oculto
-    driver = webdriver.Chrome(options=options)
+    options.add_argument("--headless")  # Ejecutar sin interfaz gráfica
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+
+    # Usar WebDriver Manager para descargar ChromeDriver
+    service = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=options)
 
     try:
-        # Abrir la página de Investing.com
         driver.get("https://es.investing.com/economic-calendar/")
-        
-        # Esperar a que la tabla del calendario se cargue
         WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, "economicCalendarData"))
         )
 
-        # Extraer los datos de la tabla
         rows = driver.find_elements(By.CSS_SELECTOR, "#economicCalendarData tbody tr")
 
         data = []
